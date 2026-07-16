@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Elderly Medication Reminder - Simple interface for taking your medicine on time">
+  <title>💊 Medication Reminder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0f0f1a;
+      --bg-card: #1a1a2e;
+      --bg-card-glow: rgba(99, 102, 241, 0.08);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --accent-green: #34d399;
+      --accent-green-glow: rgba(52, 211, 153, 0.3);
+      --accent-amber: #fbbf24;
+      --accent-amber-glow: rgba(251, 191, 36, 0.3);
+      --accent-red: #f87171;
+      --accent-indigo: #818cf8;
+      --border: rgba(148, 163, 184, 0.1);
+      --radius: 20px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    /* Subtle animated gradient background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 70%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 30%, rgba(52, 211, 153, 0.04) 0%, transparent 50%);
+      animation: bgFloat 20s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes bgFloat {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-3%, 3%); }
+    }
+
+    #loading {
+      text-align: center;
+    }
+
+    #loading .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent-indigo);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #no-meds {
+      text-align: center;
+      display: none;
+    }
+
+    #no-meds .emoji { font-size: 72px; margin-bottom: 16px; }
+
+    #no-meds h2 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    #no-meds p {
+      color: var(--text-secondary);
+      font-size: 18px;
+    }
+
+    /* ─── Medication Card ─────────────────────────── */
+    #med-container {
+      display: none;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .med-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      animation: cardSlideIn 0.5s ease-out;
+    }
+
+    @keyframes cardSlideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .med-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-indigo), var(--accent-green));
+    }
+
+    .med-card .pill-icon {
+      font-size: 56px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .med-card .med-name {
+      font-size: 36px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .med-card .med-time {
+      font-size: 20px;
+      color: var(--accent-indigo);
+      font-weight: 600;
+      margin-bottom: 32px;
+    }
+
+    .med-card .status-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+      background: rgba(251, 191, 36, 0.15);
+      color: var(--accent-amber);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .status-taken {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .status-missed {
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--accent-red);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+    }
+
+    /* ─── Action Buttons ─────────────────────────── */
+    .actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 20px;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn:hover::after { opacity: 1; }
+
+    .btn:active { transform: scale(0.96); }
+
+    .btn-taken {
+      background: linear-gradient(135deg, #059669, #34d399);
+      color: white;
+      box-shadow: 0 8px 32px var(--accent-green-glow);
+    }
+
+    .btn-remind {
+      background: linear-gradient(135deg, #d97706, #fbbf24);
+      color: #1a1a2e;
+      box-shadow: 0 8px 32px var(--accent-amber-glow);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn .btn-icon { font-size: 28px; display: block; margin-bottom: 4px; }
+
+    /* ─── Success animation ─────────────────────── */
+    .med-card.done {
+      border-color: var(--accent-green);
+      background: rgba(52, 211, 153, 0.05);
+    }
+
+    @keyframes checkPop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .check-anim {
+      font-size: 64px;
+      animation: checkPop 0.5s ease-out;
+    }
+
+    /* ─── User ID selector (dev helper) ──────────── */
+    .user-select {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 12px;
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+    }
+
+    .user-select label { color: var(--text-secondary); margin-right: 6px; }
+    .user-select input {
+      width: 50px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      padding: 4px 8px;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="user-select">
+    <label>User ID:</label>
+    <input type="number" id="userId" value="1" min="1" onchange="loadMeds()">
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p style="color: var(--text-secondary);">Loading medications...</p>
+  </div>
+
+  <div id="no-meds">
+    <div class="emoji">🎉</div>
+    <h2>All Done!</h2>
+    <p>No pending medications right now.</p>
+  </div>
+
+  <div id="med-container"></div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+    let currentUserId = 1;
+
+    async function loadMeds() {
+      currentUserId = document.getElementById('userId').value;
+      const loading = document.getElementById('loading');
+      const noMeds = document.getElementById('no-meds');
+      const container = document.getElementById('med-container');
+
+      loading.style.display = 'block';
+      noMeds.style.display = 'none';
+      container.style.display = 'none';
+      container.innerHTML = '';
+
+      try {
+        const today = new Date().toISOString().split('T')[0];
+        const res = await fetch(`${API_BASE}/logs?user_id=${currentUserId}&date=${today}`);
+        const logs = await res.json();
+
+        // Also get today's meds to show any that haven't been logged yet
+        const medsRes = await fetch(`${API_BASE}/medications/today?user_id=${currentUserId}`);
+        const meds = await medsRes.json();
+
+        loading.style.display = 'none';
+
+        // Filter to pending logs (these need action)
+        const pending = logs.filter(l => l.status === 'pending');
+
+        if (pending.length === 0 && logs.length > 0) {
+          noMeds.style.display = 'block';
+          return;
+        }
+
+        if (pending.length === 0 && meds.length === 0) {
+          noMeds.querySelector('h2').textContent = 'No Medications';
+          noMeds.querySelector('p').textContent = 'No medications scheduled.';
+          noMeds.style.display = 'block';
+          return;
+        }
+
+        container.style.display = 'block';
+
+        pending.forEach((log, i) => {
+          const card = document.createElement('div');
+          card.className = 'med-card';
+          card.id = `card-${log.id}`;
+          card.style.animationDelay = `${i * 0.1}s`;
+          card.innerHTML = `
+            <span class="pill-icon">💊</span>
+            <div class="med-name">Take ${log.name}</div>
+            <div class="med-time">Scheduled: ${log.time}</div>
+            <div class="status-badge status-${log.status}">${log.status}</div>
+            <div class="actions">
+              <button class="btn btn-taken" id="btn-taken-${log.id}" onclick="markTaken(${log.id})">
+                <span class="btn-icon">✅</span>
+                Taken
+              </button>
+              <button class="btn btn-remind" onclick="remindLater(${log.id})">
+                <span class="btn-icon">⏰</span>
+                Later
+              </button>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        loading.style.display = 'none';
+        container.style.display = 'block';
+        container.innerHTML = `<div class="med-card"><span class="pill-icon">⚠️</span><div class="med-name">Connection Error</div><p style="color: var(--text-secondary)">Could not connect to the server. Is the backend running?</p></div>`;
+      }
+    }
+
+    async function markTaken(logId) {
+      const btn = document.getElementById(`btn-taken-${logId}`);
+      const card = document.getElementById(`card-${logId}`);
+      btn.disabled = true;
+
+      try {
+        await fetch(`${API_BASE}/logs/${logId}/taken`, { method: 'POST' });
+        
+        card.classList.add('done');
+        card.querySelector('.actions').innerHTML = '<div class="check-anim">✅</div>';
+        card.querySelector('.status-badge').className = 'status-badge status-taken';
+        card.querySelector('.status-badge').textContent = 'TAKEN';
+        card.querySelector('.med-name').textContent = 'Done! 👍';
+
+        // Reload after 2 seconds
+        setTimeout(loadMeds, 2000);
+      } catch (err) {
+        btn.disabled = false;
+        alert('Failed to mark as taken. Please try again.');
+      }
+    }
+
+    function remindLater(logId) {
+      const card = document.getElementById(`card-${logId}`);
+      card.style.opacity = '0.4';
+      card.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1)';
+      }, 3000);
+    }
+
+    // Auto-refresh every 60 seconds
+    setInterval(loadMeds, 60000);
+
+    // Initial load
+    loadMeds();
+  </script>
+</body>
+</html>

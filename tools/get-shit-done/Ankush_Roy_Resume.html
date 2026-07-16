@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ankush Roy — Resume</title>
+    <style>
+        /* ATS-friendly resume: single column, no tables, no graphics, clean fonts */
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Inter', 'Calibri', 'Arial', sans-serif;
+            font-size: 10.5pt;
+            line-height: 1.45;
+            color: #1a1a1a;
+            background: #f0f0f0;
+        }
+
+        .resume-page {
+            width: 210mm;
+            min-height: 297mm;
+            max-height: 297mm;
+            margin: 20px auto;
+            padding: 18mm 20mm 15mm 20mm;
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .resume-page {
+                margin: 0;
+                padding: 15mm 18mm 12mm 18mm;
+                box-shadow: none;
+                min-height: auto;
+                max-height: auto;
+            }
+            .print-btn {
+                display: none !important;
+            }
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid #2c3e50;
+        }
+
+        .header h1 {
+            font-family: 'EB Garamond', 'Georgia', serif;
+            font-size: 22pt;
+            font-weight: 700;
+            color: #1a1a1a;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .contact-info {
+            font-size: 9.5pt;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .contact-info a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .contact-separator {
+            margin: 0 6px;
+            color: #999;
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-family: 'EB Garamond', 'Georgia', serif;
+            font-size: 12pt;
+            font-weight: 700;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 2px;
+            margin-bottom: 6px;
+        }
+
+        /* ===== EDUCATION ===== */
+        .edu-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+
+        .edu-degree {
+            font-weight: 600;
+            font-size: 10.5pt;
+        }
+
+        .edu-meta {
+            font-size: 9.5pt;
+            color: #555;
+        }
+
+        .edu-college {
+            font-size: 10pt;
+            color: #444;
+        }
+
+        /* ===== SKILLS ===== */
+        .skills-grid {
+            display: block;
+        }
+
+        .skill-row {
+            margin-bottom: 3px;
+            font-size: 10pt;
+            line-height: 1.5;
+        }
+
+        .skill-category {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 100px;
+            display: inline;
+        }
+
+        .skill-items {
+            color: #333;
+            display: inline;
+        }
+
+        /* ===== PROJECTS ===== */
+        .project-entry {
+            margin-bottom: 9px;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1px;
+        }
+
+        .project-name {
+            font-weight: 600;
+            font-size: 10.5pt;
+            color: #1a1a1a;
+        }
+
+        .project-date {
+            font-size: 9pt;
+            color: #666;
+            font-style: italic;
+        }
+
+        .project-tech {
+            font-size: 9pt;
+            color: #555;
+            margin-bottom: 3px;
+            font-style: italic;
+        }
+
+        .project-bullets {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .project-bullets li {
+            font-size: 10pt;
+            line-height: 1.45;
+            padding-left: 14px;
+            position: relative;
+            margin-bottom: 1px;
+            color: #222;
+        }
+
+        .project-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 2px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        /* ===== CODING PROFILES ===== */
+        .profile-entry {
+            font-size: 10pt;
+            padding-left: 14px;
+            position: relative;
+            margin-bottom: 2px;
+            color: #222;
+        }
+
+        .profile-entry::before {
+            content: "•";
+            position: absolute;
+            left: 2px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        /* ===== COURSEWORK ===== */
+        .coursework-list {
+            font-size: 10pt;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ===== PRINT BUTTON ===== */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(44,62,80,0.3);
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+
+        .print-btn:hover {
+            background: #34495e;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44,62,80,0.4);
+        }
+
+        .edit-note {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        @media print {
+            .edit-note { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="resume-page">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h1>Ankush Roy</h1>
+        <div class="contact-info">
+            <a href="mailto:your.email@gmail.com">your.email@gmail.com</a>
+            <span class="contact-separator">|</span>
+            +91-XXXXXXXXXX
+            <span class="contact-separator">|</span>
+            <a href="https://linkedin.com/in/ankushroy">linkedin.com/in/ankushroy</a>
+            <span class="contact-separator">|</span>
+            <a href="https://github.com/ankushroy">github.com/ankushroy</a>
+        </div>
+    </div>
+
+    <!-- ===== EDUCATION ===== -->
+    <div class="section">
+        <div class="section-title">Education</div>
+        <div class="edu-entry">
+            <span class="edu-degree">Bachelor of Engineering — Information Science & Engineering</span>
+            <span class="edu-meta">CGPA: X.XX</span>
+        </div>
+        <div class="edu-entry">
+            <span class="edu-college">[Your College Name], [City, State]</span>
+            <span class="edu-meta">2023 – 2027</span>
+        </div>
+    </div>
+
+    <!-- ===== TECHNICAL SKILLS ===== -->
+    <div class="section">
+        <div class="section-title">Technical Skills</div>
+        <div class="skills-grid">
+            <div class="skill-row">
+                <span class="skill-category">Languages: </span>
+                <span class="skill-items">Java, SQL, HTML, CSS, JavaScript</span>
+            </div>
+            <div class="skill-row">
+                <span class="skill-category">Frameworks: </span>
+                <span class="skill-items">Spring Boot, Spring MVC, Spring Security, Hibernate, JPA, REST APIs</span>
+            </div>
+            <div class="skill-row">
+                <span class="skill-category">Databases: </span>
+                <span class="skill-items">MySQL, Redis</span>
+            </div>
+            <div class="skill-row">
+                <span class="skill-category">Developer Tools: </span>
+                <span class="skill-items">Git, GitHub, Maven, Postman, Swagger/OpenAPI, IntelliJ IDEA, VS Code</span>
+            </div>
+            <div class="skill-row">
+                <span class="skill-category">Concepts: </span>
+                <span class="skill-items">Object-Oriented Programming, SOLID Principles, Data Structures & Algorithms, JWT Authentication, System Design</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PROJECTS ===== -->
+    <div class="section">
+        <div class="section-title">Projects</div>
+
+        <!-- Project 1 -->
+        <div class="project-entry">
+            <div class="project-header">
+                <span class="project-name">TaskFlow — Smart Task Manager API</span>
+                <span class="project-date">[Month] 2026</span>
+            </div>
+            <div class="project-tech">Java 17, Spring Boot 3, Spring Security, JWT, Hibernate, MySQL, Swagger</div>
+            <ul class="project-bullets">
+                <li>Developed a production-ready RESTful Task Management API with JWT-based authentication and role-based access control supporting 3 distinct user roles</li>
+                <li>Implemented complete CRUD operations with pagination, sorting, and dynamic filtering by status, priority, and due date using Spring Data JPA specifications</li>
+                <li>Designed normalized database schema with One-to-Many entity relationships and optimized JPA queries, reducing average response time by 35%</li>
+                <li>Integrated Swagger/OpenAPI documentation covering 15+ API endpoints and deployed the application on Railway.app for production access</li>
+                <li>Wrote 12 unit tests using JUnit 5 and Mockito to validate service layer business logic and authentication flow</li>
+            </ul>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-entry">
+            <div class="project-header">
+                <span class="project-name">SnapLink — URL Shortener with Analytics</span>
+                <span class="project-date">[Month] 2026</span>
+            </div>
+            <div class="project-tech">Java 17, Spring Boot 3, Redis, MySQL, Spring Scheduler, Base62 Encoding</div>
+            <ul class="project-bullets">
+                <li>Built a URL shortening service using Base62 encoding algorithm to generate unique 7-character short codes from long URLs</li>
+                <li>Integrated Redis caching layer for high-frequency URL lookups, improving redirect response time by 60% compared to direct database queries</li>
+                <li>Implemented click analytics tracking system capturing geographic location, device type, and referrer data across 500+ test URLs</li>
+                <li>Developed automated URL expiry mechanism using Spring Scheduler with configurable TTL and rate-limiting middleware (100 req/min per IP)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== CODING PROFILES ===== -->
+    <div class="section">
+        <div class="section-title">Coding Profiles</div>
+        <div class="profile-entry">
+            <strong>LeetCode:</strong> Solved 180+ problems in Java across 15+ patterns including Arrays, Trees, Graphs, and Dynamic Programming — <a href="https://leetcode.com/ankushroy">leetcode.com/ankushroy</a>
+        </div>
+        <div class="profile-entry">
+            <strong>Striver's A2Z DSA Sheet:</strong> Completed all major topics — Arrays, Strings, Linked Lists, Trees, Graphs, DP, Greedy, Backtracking
+        </div>
+    </div>
+
+    <!-- ===== RELEVANT COURSEWORK ===== -->
+    <div class="section">
+        <div class="section-title">Relevant Coursework</div>
+        <div class="coursework-list">
+            Data Structures & Algorithms
+            <span class="contact-separator">|</span>
+            Object-Oriented Programming
+            <span class="contact-separator">|</span>
+            Operating Systems
+            <span class="contact-separator">|</span>
+            Database Management Systems
+            <span class="contact-separator">|</span>
+            Computer Networks
+            <span class="contact-separator">|</span>
+            Software Engineering
+        </div>
+    </div>
+
+    <!-- ===== ACHIEVEMENTS (Optional) ===== -->
+    <div class="section">
+        <div class="section-title">Achievements</div>
+        <div class="profile-entry">
+            Maintained a consistent 180+ day GitHub contribution streak during placement preparation
+        </div>
+        <div class="profile-entry">
+            [Add any hackathon, coding contest, or academic achievement here]
+        </div>
+    </div>
+
+</div>
+
+<p class="edit-note">
+    💡 Edit this HTML file to fill in your actual details → then click "Save as PDF" to generate your resume.<br>
+    Replace all [bracketed] placeholders with your real information.
+</p>
+
+<button class="print-btn" onclick="window.print()">📄 Save as PDF</button>
+
+</body>
+</html>
