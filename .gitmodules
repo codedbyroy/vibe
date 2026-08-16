@@ -1,0 +1,3 @@
+[submodule "web/chess-game-review"]
+	path = web/chess-game-review
+	url = https://github.com/codedbyroy/chess-game-review.git
