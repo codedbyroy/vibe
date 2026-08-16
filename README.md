@@ -9,9 +9,10 @@ Vibe coding is the practice of designing, structuring, and iterating on codebase
 ## 📂 Repository Structure
 
 - **`app/`**: High-fidelity mobile applications.
-  - **[expense-tracker](file:///Users/ankushroy/PPL/I%20P/pro2/vibe/app/expense-tracker)**: Expo SDK 54 & React Native mobile application for personal finance, featuring physics-based spring animations, secure PIN lock, and dual-mode offline-first Firestore sync.
+  - **[expense-tracker](app/expense-tracker)**: Expo SDK 54 & React Native mobile application for personal finance, featuring physics-based spring animations, secure PIN lock, and dual-mode offline-first Firestore sync.
 - **`web/`**: Feature-rich web applications.
-  - **[neonvault-store](file:///Users/ankushroy/PPL/I%20P/pro2/vibe/web/neonvault-store)**: Next.js 15 anime collectibles e-commerce platform built with Vanilla CSS modules, custom React state machine, and a premium dark cyber aesthetic.
+  - **[neonvault-store](web/neonvault-store)**: Next.js 15 anime collectibles e-commerce platform built with Vanilla CSS modules, custom React state machine, and a premium dark cyber aesthetic.
+  - **[chess-game-review](web/chess-game-review)**: Offline Chess.com-style Game Review platform featuring in-browser Stockfish WebAssembly engine evaluations, real-time win probability accuracy metrics, and move classification badges.
 
 ---
 
@@ -24,5 +25,7 @@ Vibe coding isn't just about letting AI generate lines of code. It is **prompt e
 3. **Monorepo / Multi-platform Scaling**: Guiding agents to modularize features (database logic, UI constants, backend connectors) so they can be easily understood and updated.
 
 For a deep dive into how each project was prompted and developed, check out their respective README files:
-- [Expense Tracker Vibe Journey](file:///Users/ankushroy/PPL/I%20P/pro2/vibe/app/expense-tracker/README.md)
-- [NeonVault Store Vibe Journey](file:///Users/ankushroy/PPL/I%20P/pro2/vibe/web/neonvault-store/README.md)
+- [Expense Tracker Vibe Journey](app/expense-tracker/README.md)
+- [NeonVault Store Vibe Journey](web/neonvault-store/README.md)
+- [Chess Game Review Vibe Journey](web/chess-game-review/README.md)
+
